@@ -3,27 +3,20 @@ import gtk
 
 class Floxer(gtk.Window):
     def __init__(self,win):
-        #win=gtk.Window()
+        
         win.set_decorated(False)                    #hide title bar
         win.connect("delete-event", gtk.main_quit)  #kill thread
+        win.set_opacity(0.5)                        #set win opacity [0:1]
+
         win.show_all()
         gtk.main()
 
 def main():
     print "Gadget Start !!!"
-    print "Using GTK"
 
     '''==================
         Show Window
     =================='''
-
-    '''
-    win=gtk.Window()
-    win.set_decorated(False)                    #hide title bar
-    win.connect("delete-event", gtk.main_quit)  #kill thread
-    win.show_all()
-    gtk.main()
-    '''
     win=gtk.Window()
     F=Floxer(win)
 
