@@ -1,0 +1,1 @@
+http://www.pygtk.org/pygtk2reference/class-gtkwindow.html
