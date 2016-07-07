@@ -8,20 +8,22 @@ class Floxer(gtk.Window):
         win.connect("delete-event", gtk.main_quit)  #kill thread
         win.set_opacity(0.5)                        #set win opacity [0:1]
 
-        win.add_events(gtk.gdk.BUTTON_PRESS_MASK)   #set mouse event
-        win.connect('button-press-event',self.mouse_callback)
-        
-        
+        win.add_events(gtk.gdk.POINTER_MOTION_MASK )            #set event mask
+        win.connect('motion_notify_event',self.motion_cb)       #set signal to function
+
+        self.win=win
         win.show_all()
         gtk.main()
-
 
     def move(self,x,y):
         pass
 
-    def mouse_callback(self,window,event):
-        print "x=", event.x, "y=", event.y
+    def motion_cb(self,window,event):
+
+        if event.state & gtk.gdk.BUTTON1_MASK:        #Press state in motion situation
+            print "x=", event.x, "y=", event.y
         
+                
 def main():
     print "Gadget Start !!!"
 
