@@ -15,14 +15,25 @@ class Floxer(QtGui.QWidget):
         self.setGeometry(100,100,400,200)
 
         self.addWidget()
+        #self.webShow("http://google.com")
 
         self.show()
         
     def addWidget(self):
-        img=QtGui.QLabel(self)          #add this widget to "self" parent
+        '''---------------
+            img load
+        ---------------'''
+        img=QtGui.QLabel(self)              #add this widget to "self" parent
         img.setGeometry(10,10,400,200)
-        pixmap = QtGui.QPixmap("fire.png")
-        img.setPixmap(pixmap)
+        
+        fire_pixmap = QtGui.QPixmap("fire.png")  #Load img to pixmap
+        pixmap=fire_pixmap.scaled(50,50)        #Resize pixmap
+        
+        img.setPixmap(fire_pixmap)               #Load pixmap to img label
+
+        '''---------------
+            btn load
+        ---------------'''
         
     '''
     def paintEvent(self, e=None): 
@@ -52,7 +63,10 @@ class Floxer(QtGui.QWidget):
         self.move(now_x-offset_x, now_y-offset_y)
 
     def webShow(self,url):
-        web = QWebView()
+        img=QtGui.QLabel(self)              #add this widget to "self" parent
+        img.setGeometry(50,10,400,200)
+        
+        web = QWebView(self)
         web.load(QUrl(url))
 
         #Using Plug to play video
