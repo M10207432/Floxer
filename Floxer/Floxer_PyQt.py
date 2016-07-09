@@ -1,11 +1,6 @@
 import sys
 from PyQt4 import QtGui, QtCore, Qt, QtWebKit
 
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
-from PyQt4.QtWebKit import *
-
-
 class Floxer(QtGui.QWidget):
     def __init__(self):
         super(Floxer,self).__init__()
@@ -17,7 +12,7 @@ class Floxer(QtGui.QWidget):
         self.setGeometry(10,10,600,600)                       
 
         self.addWidget()
-        self.webShow("http://google.com")
+        self.webShow("http://youtube.com")
 
         self.show()
         
@@ -66,27 +61,15 @@ class Floxer(QtGui.QWidget):
 
     def webShow(self,url):
         img=QtGui.QLabel(self)              #add this widget to "self" parent
-        img.setGeometry(100,10,400,200)
+        img.setGeometry(100,10,400,600)
         
         web = QtWebKit.QWebView(img)
-        web.load(QUrl(url))
-
-
-        
-        img1=QtGui.QLabel(self)              #add this widget to "self" parent
-        img1.setGeometry(200,210,400,200)
-        
-        web1 = QtWebKit.QWebView(img1)
-        web1.load(QUrl(url))
-        
-        setting1s = web1.settings()
-        setting1s.setAttribute(setting1s.PluginsEnabled, True)
+        #web.resize(400,200)
+        web.load(QtCore.QUrl(url))
 
         #Using Plug to play video
         settings = web.settings()
         settings.setAttribute(settings.PluginsEnabled, True)
-
-        #web.show()
         
 def main():
     app = QtGui.QApplication(sys.argv) 
