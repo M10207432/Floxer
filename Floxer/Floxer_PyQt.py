@@ -14,7 +14,7 @@ class Floxer(QtGui.QWidget):
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)      #disable title bar
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)   #Background transparent (CustomizeWindowHint)
         self.setWindowOpacity(.75)                              #Windows Opacity
-        self.setGeometry(100,100,400,200)                       
+        self.setGeometry(10,10,600,600)                       
 
         self.addWidget()
         self.webShow("http://google.com")
@@ -26,10 +26,10 @@ class Floxer(QtGui.QWidget):
             img load
         ---------------'''
         img=QtGui.QLabel(self)              #add this widget to "self" parent
-        img.setGeometry(10,10,400,200)
+        img.setGeometry(10,10,600,600)
         
         fire_pixmap = QtGui.QPixmap("fire.png")     #Load img to pixmap
-        pixmap=fire_pixmap.scaled(50,50)            #Resize pixmap
+        pixmap=fire_pixmap.scaled(100,100)            #Resize pixmap
         
         img.setPixmap(fire_pixmap)                  #Load pixmap to img label
 
@@ -66,16 +66,27 @@ class Floxer(QtGui.QWidget):
 
     def webShow(self,url):
         img=QtGui.QLabel(self)              #add this widget to "self" parent
-        img.setGeometry(50,10,400,200)
+        img.setGeometry(100,10,400,200)
         
         web = QtWebKit.QWebView(img)
         web.load(QUrl(url))
+
+
+        
+        img1=QtGui.QLabel(self)              #add this widget to "self" parent
+        img1.setGeometry(200,210,400,200)
+        
+        web1 = QtWebKit.QWebView(img1)
+        web1.load(QUrl(url))
+        
+        setting1s = web1.settings()
+        setting1s.setAttribute(setting1s.PluginsEnabled, True)
 
         #Using Plug to play video
         settings = web.settings()
         settings.setAttribute(settings.PluginsEnabled, True)
 
-        web.show()
+        #web.show()
         
 def main():
     app = QtGui.QApplication(sys.argv) 
