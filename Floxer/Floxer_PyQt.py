@@ -1,5 +1,5 @@
 import sys
-from PyQt4 import QtGui, QtCore, Qt
+from PyQt4 import QtGui, QtCore, Qt, QtWebKit
 
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
@@ -9,13 +9,15 @@ from PyQt4.QtWebKit import *
 class Floxer(QtGui.QWidget):
     def __init__(self):
         super(Floxer,self).__init__()
+
         
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)      #disable title bar
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)   #Background transparent (CustomizeWindowHint)
-        self.setGeometry(100,100,400,200)
+        self.setWindowOpacity(.75)                              #Windows Opacity
+        self.setGeometry(100,100,400,200)                       
 
         self.addWidget()
-        #self.webShow("http://google.com")
+        self.webShow("http://google.com")
 
         self.show()
         
@@ -26,10 +28,10 @@ class Floxer(QtGui.QWidget):
         img=QtGui.QLabel(self)              #add this widget to "self" parent
         img.setGeometry(10,10,400,200)
         
-        fire_pixmap = QtGui.QPixmap("fire.png")  #Load img to pixmap
-        pixmap=fire_pixmap.scaled(50,50)        #Resize pixmap
+        fire_pixmap = QtGui.QPixmap("fire.png")     #Load img to pixmap
+        pixmap=fire_pixmap.scaled(50,50)            #Resize pixmap
         
-        img.setPixmap(fire_pixmap)               #Load pixmap to img label
+        img.setPixmap(fire_pixmap)                  #Load pixmap to img label
 
         '''---------------
             btn load
@@ -66,7 +68,7 @@ class Floxer(QtGui.QWidget):
         img=QtGui.QLabel(self)              #add this widget to "self" parent
         img.setGeometry(50,10,400,200)
         
-        web = QWebView(self)
+        web = QtWebKit.QWebView(img)
         web.load(QUrl(url))
 
         #Using Plug to play video
@@ -76,8 +78,7 @@ class Floxer(QtGui.QWidget):
         web.show()
         
 def main():
-    
-    app = QApplication(sys.argv) 
+    app = QtGui.QApplication(sys.argv) 
 
     F=Floxer()
     
