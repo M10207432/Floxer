@@ -1,5 +1,7 @@
 import sys
 from PyQt4 import QtGui, QtCore, Qt, QtWebKit
+from PyQt4.phonon import Phonon
+import livestreamer
 
 class Floxer(QtGui.QWidget):
     def __init__(self):
@@ -7,12 +9,12 @@ class Floxer(QtGui.QWidget):
 
         
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)      #disable title bar
-        self.setAttribute(QtCore.Qt.WA_TranslucentBackground)   #Background transparent (CustomizeWindowHint)
-        self.setWindowOpacity(.75)                              #Windows Opacity
+        #self.setAttribute(QtCore.Qt.WA_TranslucentBackground)   #Background transparent (CustomizeWindowHint)
+        self.setWindowOpacity(1)                              #Windows Opacity
         self.setGeometry(10,10,600,600)                       
 
         self.addWidget()
-        self.webShow("http://youtube.com")
+        self.webShow("http://www.news520.net/mix/leedootv.html")
 
         self.show()
         
@@ -64,13 +66,15 @@ class Floxer(QtGui.QWidget):
         img.setGeometry(100,10,400,600)
         
         web = QtWebKit.QWebView(img)
-        #web.resize(400,200)
-        web.load(QtCore.QUrl(url))
 
         #Using Plug to play video
-        settings = web.settings()
-        settings.setAttribute(settings.PluginsEnabled, True)
-        
+        settings = QtWebKit.QWebSettings
+        settings.globalSettings().setAttribute(settings.PluginsEnabled, True)
+
+        #web.resize(400,200)
+        web.load(QtCore.QUrl(url))
+        web.show()
+                
 def main():
     app = QtGui.QApplication(sys.argv) 
 
@@ -80,4 +84,28 @@ def main():
     
     
 if __name__=="__main__":
-    main()
+    #main()
+    '''
+    streams=livestreamer.streams("https://www.twitch.tv/wei81610")
+    stream=streams['source']
+    fd=stream.open()
+    data=fd.read(1024)
+    fd.close()
+
+    print data
+    print type(data)
+    '''
+
+    app = QtGui.QApplication(sys.argv) 
+    #-----------
+    vp=Phonon.VideoPlayer()
+    vp.show()
+    media=Phonon.MediaSource("../[Dymy][Shokugeki no Souma Ni no Sara][02][BIG5][1280X720].mp4")
+    vp.load(media)
+    vp.play()
+    
+    #-----------
+       
+    sys.exit(app.exec_())
+    
+
