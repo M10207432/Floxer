@@ -10,12 +10,16 @@ class Floxer(QtGui.QWidget):
         
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)      #disable title bar
         #self.setAttribute(QtCore.Qt.WA_TranslucentBackground)   #Background transparent (CustomizeWindowHint)
-        self.setWindowOpacity(1)                              #Windows Opacity
+        self.setWindowOpacity(0.75)                              #Windows Opacity
         self.setGeometry(10,10,600,600)                       
 
+        '''-------------------
+            Method
+        -------------------'''
         self.addWidget()
-        self.webShow("http://www.news520.net/mix/leedootv.html")
-
+        #self.webShow("http://www.news520.net/mix/leedootv.html")
+        self.addVideo("../[Dymy][Shokugeki no Souma Ni no Sara][02][BIG5][1280X720].mp4")
+    
         self.show()
         
     def addWidget(self):
@@ -23,7 +27,7 @@ class Floxer(QtGui.QWidget):
             img load
         ---------------'''
         img=QtGui.QLabel(self)              #add this widget to "self" parent
-        img.setGeometry(10,10,600,600)
+        img.setGeometry(0,0,600,600)
         
         fire_pixmap = QtGui.QPixmap("fire.png")     #Load img to pixmap
         pixmap=fire_pixmap.scaled(100,100)            #Resize pixmap
@@ -33,7 +37,12 @@ class Floxer(QtGui.QWidget):
         '''---------------
             btn load
         ---------------'''
-        
+    def addVideo(self,path):
+        self.vp=Phonon.VideoPlayer(self)
+        self.vp.setGeometry(150,10,300,300)
+        media=Phonon.MediaSource(path)
+        self.vp.load(media)
+        self.vp.play()
     '''
     def paintEvent(self, e=None): 
         qp = QtGui.QPainter()
@@ -81,10 +90,8 @@ def main():
     F=Floxer()
     
     sys.exit(app.exec_())
-    
-    
-if __name__=="__main__":
-    #main()
+
+def test():
     '''
     streams=livestreamer.streams("https://www.twitch.tv/wei81610")
     stream=streams['source']
@@ -96,9 +103,27 @@ if __name__=="__main__":
     print type(data)
     '''
 
-    app = QtGui.QApplication(sys.argv) 
+    app = QtGui.QApplication(sys.argv)
+    
     #-----------
-    vp=Phonon.VideoPlayer()
+    '''
+    panel=QtGui.QWidget()
+    
+    img=QtGui.QLabel(panel)              #add this widget to "self" parent
+    img.setGeometry(10,10,600,600)
+    panel.setGeometry(10,10,600,600) 
+
+    vp=Phonon.VideoPlayer(img)
+    vp.show()
+
+    panel.show()
+    '''
+    panel=QtGui.QWidget()
+    panel.setGeometry(10,10,600,600)
+    vp=Phonon.VideoPlayer(panel)
+    vp.setGeometry(10,10,600,600)
+    panel.show()
+    
     vp.show()
     media=Phonon.MediaSource("../[Dymy][Shokugeki no Souma Ni no Sara][02][BIG5][1280X720].mp4")
     vp.load(media)
@@ -107,5 +132,10 @@ if __name__=="__main__":
     #-----------
        
     sys.exit(app.exec_())
+    
+if __name__=="__main__":
+    main()
+    #test()
+    
     
 
