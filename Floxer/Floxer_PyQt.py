@@ -17,8 +17,8 @@ class Floxer(QtGui.QWidget):
             Method
         -------------------'''
         self.addWidget()
-        #self.webShow("http://www.news520.net/mix/leedootv.html")
-        self.addVideo("../[Dymy][Shokugeki no Souma Ni no Sara][02][BIG5][1280X720].mp4")
+        self.webShow("https://www.google.com.tw/")
+        #self.addVideo("../[Dymy][Shokugeki no Souma Ni no Sara][02][BIG5][1280X720].mp4")
     
         self.show()
         
@@ -74,16 +74,27 @@ class Floxer(QtGui.QWidget):
         img=QtGui.QLabel(self)              #add this widget to "self" parent
         img.setGeometry(100,10,400,600)
         
-        web = QtWebKit.QWebView(img)
+        self.web = QtWebKit.QWebView(img)
 
         #Using Plug to play video
         settings = QtWebKit.QWebSettings
         settings.globalSettings().setAttribute(settings.PluginsEnabled, True)
 
         #web.resize(400,200)
-        web.load(QtCore.QUrl(url))
-        web.show()
-                
+        self.web.load(QtCore.QUrl(url))
+        self.web.show()
+
+        #web signal
+        self.web.loadFinished.connect(self.cusHtml)
+        
+    def cusHtml(self):
+        
+        frame = self.web.page().mainFrame()
+        html=frame.toHtml()
+        #print unicode(frame.toHtml()).encode('utf-8')
+        
+        #self.web.setHtml(html,self.web.url())
+        
 def main():
     app = QtGui.QApplication(sys.argv) 
 
@@ -106,29 +117,19 @@ def test():
     app = QtGui.QApplication(sys.argv)
     
     #-----------
-    '''
-    panel=QtGui.QWidget()
-    
-    img=QtGui.QLabel(panel)              #add this widget to "self" parent
-    img.setGeometry(10,10,600,600)
-    panel.setGeometry(10,10,600,600) 
 
-    vp=Phonon.VideoPlayer(img)
-    vp.show()
-
-    panel.show()
-    '''
+    #-----Panel
     panel=QtGui.QWidget()
     panel.setGeometry(10,10,600,600)
+
+    #-----VideoPlayer in panel
     vp=Phonon.VideoPlayer(panel)
     vp.setGeometry(10,10,600,600)
-    panel.show()
-    
-    vp.show()
     media=Phonon.MediaSource("../[Dymy][Shokugeki no Souma Ni no Sara][02][BIG5][1280X720].mp4")
     vp.load(media)
     vp.play()
-    
+
+    panel.show()
     #-----------
        
     sys.exit(app.exec_())
