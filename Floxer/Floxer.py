@@ -1,5 +1,5 @@
 import gtk
-import cairo
+#import cairo
 from math import pi
 #import webkit
 
@@ -14,7 +14,7 @@ def transparent_expose(widget, event):
 '''
 
 def draw_pixbuf(widget, event):
-    path = 'fire.png'
+    path = 'BayMax.png'
     pixbuf = gtk.gdk.pixbuf_new_from_file(path)
     widget.window.draw_pixbuf(widget.style.bg_gc[gtk.STATE_NORMAL], pixbuf, 0, 0, 0,5)
  
@@ -33,10 +33,10 @@ class Floxer(gtk.Window):
         --------------------'''
         self.drag_flag=True             #Drag Windows flag
         self.win.set_decorated(False)   #hide title bar
-        #self.win.set_opacity(0.5)       #set win opacity [0:1]
-        #self.win.modify_bg(self.gtk.STATE_NORMAL, self.gtk.gdk.Color(0, 65535, 0))
+        self.win.set_opacity(0.5)       #set win opacity [0:1]
+        self.win.modify_bg(self.gtk.STATE_NORMAL, self.gtk.gdk.Color(0, 65535, 0))
 
-        #self.win.set_size_request(400,400)
+        self.win.set_size_request(400,400)
 
         hbbox = gtk.HButtonBox()
         win.add(hbbox)
@@ -71,7 +71,7 @@ class Floxer(gtk.Window):
         #=====Image
         
         img=self.gtk.Image()
-        img.set_from_file("fire.png")
+        img.set_from_file("BayMax.png")
         self.win.add(img)
         
         pass
