@@ -2,22 +2,27 @@ import sys
 from PyQt4 import QtGui, QtCore, Qt, QtWebKit
 from PyQt4.phonon import Phonon
 import livestreamer
+import requests
+import re
 
 class Floxer(QtGui.QWidget):
     def __init__(self):
         super(Floxer,self).__init__()
 
+        self.webhtml = None
+        self.url = "https://www.gamer.com.tw/"
         
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)      #disable title bar
         #self.setAttribute(QtCore.Qt.WA_TranslucentBackground)   #Background transparent (CustomizeWindowHint)
         self.setWindowOpacity(0.75)                              #Windows Opacity
         self.setGeometry(10,10,600,600)                       
-
+        
         '''-------------------
             Method
         -------------------'''
         self.addWidget()
-        self.webShow("https://www.google.com.tw/")
+        self.webHTML(self.url)
+        self.webShow(self.url)
         #self.addVideo("../[Dymy][Shokugeki no Souma Ni no Sara][02][BIG5][1280X720].mp4")
     
         self.show()
@@ -70,7 +75,15 @@ class Floxer(QtGui.QWidget):
         offset_y = self.offset.y()
         self.move(now_x-offset_x, now_y-offset_y)
 
+    def webHTML(self,url):
+        web = requests.get(url)
+        self.webhtml = web.text
+        self.webhtml = re.sub("PC","FUCK!!!",self.webhtml)
+
+        #web.text =None
+        
     def webShow(self,url):
+        
         img=QtGui.QLabel(self)              #add this widget to "self" parent
         img.setGeometry(100,10,400,600)
         
@@ -81,7 +94,13 @@ class Floxer(QtGui.QWidget):
         settings.globalSettings().setAttribute(settings.PluginsEnabled, True)
 
         #web.resize(400,200)
-        self.web.load(QtCore.QUrl(url))
+        #self.web.load(QtCore.QUrl(url))
+        if self.webhtml == None:
+            "Without HTML"
+            self.web.load(QtCore.QUrl(url))    
+        else:
+            "With HTML Revise"
+            self.web.setHtml(self.webhtml,QtCore.QUrl(url))
         self.web.show()
 
         #web signal
@@ -133,7 +152,7 @@ def test():
     #-----------
        
     sys.exit(app.exec_())
-    
+
 if __name__=="__main__":
     main()
     #test()
