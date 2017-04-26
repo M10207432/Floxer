@@ -9,20 +9,32 @@ class Floxer(QtGui.QWidget):
     def __init__(self):
         super(Floxer,self).__init__()
 
+        '''-------------------
+            parameter
+        -------------------'''
         self.webhtml = None
-        self.url = "https://www.gamer.com.tw/"
-        
-        self.setWindowFlags(QtCore.Qt.FramelessWindowHint)      #disable title bar
+        #self.url1 = "https://www.gamer.com.tw/"
+        #self.pos1 = [0,0,400,400]
+
+        self.url2 = "http://disp.cc/b/62-9ZTN"
+        self.pos2 = [400,0,800,800]
+        '''-------------------
+            Setting
+        -------------------'''
+        #self.setWindowFlags(QtCore.Qt.FramelessWindowHint)      #disable title bar
         #self.setAttribute(QtCore.Qt.WA_TranslucentBackground)   #Background transparent (CustomizeWindowHint)
         self.setWindowOpacity(0.75)                              #Windows Opacity
         self.setGeometry(10,10,600,600)                       
         
         '''-------------------
-            Method
+            Flow
         -------------------'''
-        self.addWidget()
-        self.webHTML(self.url)
-        self.webShow(self.url)
+        #self.addWidget()
+        #self.webHTML(self.url1)
+        #self.webShow(self.url1,self.pos1)
+
+        self.webHTML(self.url2)
+        self.webShow(self.url2,self.pos2)
         #self.addVideo("../[Dymy][Shokugeki no Souma Ni no Sara][02][BIG5][1280X720].mp4")
     
         self.show()
@@ -78,14 +90,25 @@ class Floxer(QtGui.QWidget):
     def webHTML(self,url):
         web = requests.get(url)
         self.webhtml = web.text
-        self.webhtml = re.sub("PC","FUCK!!!",self.webhtml)
+
+        g = re.findall("<div align=(.*?)</div>",self.webhtml)
+        rmtext = "<div align="+g[4]+"</div>"
+        print rmtext
+        
+        self.webhtml = re.sub("<div align=(.*?)</div>", '', web.text)
+        
+        g1 = re.findall("<div align="+g[4]+"</div>",self.webhtml)
+        rmtext = g1
+        print rmtext
+        
+        #self.webhtml = re.sub("PC","FUCK!!!",self.webhtml)
 
         #web.text =None
         
-    def webShow(self,url):
+    def webShow(self,url, pos):
         
         img=QtGui.QLabel(self)              #add this widget to "self" parent
-        img.setGeometry(100,10,400,600)
+        img.setGeometry(pos[0],pos[1],pos[2],pos[3])
         
         self.web = QtWebKit.QWebView(img)
 
@@ -111,7 +134,6 @@ class Floxer(QtGui.QWidget):
         frame = self.web.page().mainFrame()
         html=frame.toHtml()
         #print unicode(frame.toHtml()).encode('utf-8')
-        
         #self.web.setHtml(html,self.web.url())
         
 def main():
