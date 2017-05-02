@@ -19,7 +19,7 @@ class Floxer(QtGui.QWidget):
         self.urledit = QtGui.QLineEdit()
         self.grid = QtGui.QGridLayout()
         
-        self.url = "https://pawelmhm.github.io/python/pyqt/qt/webkit/2015/09/08/browser.html"
+        self.url = "http://disp.cc/b/62-9ZTN"
         self.webpos = [400,0,800,800]
         
         '''-------------------
@@ -41,6 +41,10 @@ class Floxer(QtGui.QWidget):
         '''-------------------
             Flow
         -------------------'''
+        raw_url = self.url
+        self.webHTML(raw_url)
+        self.browser.setHtml(self.webhtml,QtCore.QUrl(raw_url))
+        
         #self.browser.show()
         #self.addWidget()
         #self.webHTML(self.url1)
@@ -51,8 +55,12 @@ class Floxer(QtGui.QWidget):
         #self.addVideo("../[Dymy][Shokugeki no Souma Ni no Sara][02][BIG5][1280X720].mp4")
     
     def _urlcallback(self):
-        url = QtCore.QUrl(self.urledit.text())
-        self.browser.load(url)
+        raw_url = self.urledit.text()
+        
+        #self.webHTML(raw_url)
+        #self.browser.setHtml(self.webhtml,QtCore.QUrl(raw_url))
+        
+        #self.browser.load(url)
         print url
         
     def addWidget(self):
@@ -104,15 +112,25 @@ class Floxer(QtGui.QWidget):
         self.move(now_x-offset_x, now_y-offset_y)
 
     def webHTML(self,url):
+        print url
         web = requests.get(url)
         self.webhtml = None
-
+        
         #g = re.findall("div align=(.*?)</div>",self.webhtml)
         #rmtext = "<div align="+g[4]+"</div>"
         #print rmtext
         
-        #self.webhtml = re.sub("Goldie", '123', web.text)
-        
+        self.webhtml = re.sub("EZikIT3", '123', web.text)
+        #self.webhtml = re.sub("location", '1', self.webhtml)
+        #self.webhtml = re.sub("reload=1", 'reload=-1', web.text)
+        if self.webhtml.find("reload") > 0:
+            print "Get reload at ",self.webhtml.find("reload=1")
+            s = self.webhtml.find("reload")
+            print self.webhtml[s:s+100]
+            
+        else:
+            print "Not find"
+            
         #g1 = re.findall("<div align="+g[4]+"</div>",self.webhtml)
         #rmtext = g1
         
