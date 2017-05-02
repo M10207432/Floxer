@@ -1,43 +1,59 @@
 import sys
-from PyQt4 import QtGui, QtCore, Qt, QtWebKit
+from PyQt4 import QtGui, QtCore, QtWebKit
+from PyQt4 import Qt
 from PyQt4.phonon import Phonon
+
 import livestreamer
 import requests
 import re
-
+        
 class Floxer(QtGui.QWidget):
     def __init__(self):
         super(Floxer,self).__init__()
 
         '''-------------------
-            parameter
+            Object
         -------------------'''
         self.webhtml = None
-        #self.url1 = "https://www.gamer.com.tw/"
-        #self.pos1 = [0,0,400,400]
-
-        self.url2 = "http://disp.cc/b/62-9ZTN"
-        self.pos2 = [400,0,800,800]
+        self.browser = QtWebKit.QWebView()
+        self.urledit = QtGui.QLineEdit()
+        self.grid = QtGui.QGridLayout()
+        
+        self.url = "https://pawelmhm.github.io/python/pyqt/qt/webkit/2015/09/08/browser.html"
+        self.webpos = [400,0,800,800]
+        
         '''-------------------
-            Setting
+            Layout Setting
         -------------------'''
+        settings = QtWebKit.QWebSettings
+        settings.globalSettings().setAttribute(settings.PluginsEnabled, True)
+
         #self.setWindowFlags(QtCore.Qt.FramelessWindowHint)      #disable title bar
         #self.setAttribute(QtCore.Qt.WA_TranslucentBackground)   #Background transparent (CustomizeWindowHint)
-        self.setWindowOpacity(0.75)                              #Windows Opacity
-        self.setGeometry(10,10,600,600)                       
+        #self.setWindowOpacity(1)                              #Windows Opacity
+        #self.setGeometry(10,10,600,600)                       
+
+        self.grid.addWidget(self.urledit, 1, 0)
+        self.grid.addWidget(self.browser, 2, 0)
         
+        self.urledit.returnPressed.connect(self._urlcallback)
+        self.setLayout(self.grid)
         '''-------------------
             Flow
         -------------------'''
+        #self.browser.show()
         #self.addWidget()
         #self.webHTML(self.url1)
         #self.webShow(self.url1,self.pos1)
 
-        self.webHTML(self.url2)
-        self.webShow(self.url2,self.pos2)
+        #self.webHTML(self.url2)
+        #self.webShow(self.url2,self.pos2)
         #self.addVideo("../[Dymy][Shokugeki no Souma Ni no Sara][02][BIG5][1280X720].mp4")
     
-        self.show()
+    def _urlcallback(self):
+        url = QtCore.QUrl(self.urledit.text())
+        self.browser.load(url)
+        print url
         
     def addWidget(self):
         '''---------------
@@ -89,17 +105,16 @@ class Floxer(QtGui.QWidget):
 
     def webHTML(self,url):
         web = requests.get(url)
-        self.webhtml = web.text
+        self.webhtml = None
 
-        g = re.findall("<div align=(.*?)</div>",self.webhtml)
-        rmtext = "<div align="+g[4]+"</div>"
-        print rmtext
+        #g = re.findall("div align=(.*?)</div>",self.webhtml)
+        #rmtext = "<div align="+g[4]+"</div>"
+        #print rmtext
         
-        self.webhtml = re.sub("<div align=(.*?)</div>", '', web.text)
+        #self.webhtml = re.sub("Goldie", '123', web.text)
         
-        g1 = re.findall("<div align="+g[4]+"</div>",self.webhtml)
-        rmtext = g1
-        print rmtext
+        #g1 = re.findall("<div align="+g[4]+"</div>",self.webhtml)
+        #rmtext = g1
         
         #self.webhtml = re.sub("PC","FUCK!!!",self.webhtml)
 
@@ -119,27 +134,32 @@ class Floxer(QtGui.QWidget):
         #web.resize(400,200)
         #self.web.load(QtCore.QUrl(url))
         if self.webhtml == None:
-            "Without HTML"
+            print "Without HTML"
             self.web.load(QtCore.QUrl(url))    
         else:
-            "With HTML Revise"
+            print "With HTML Revise"
             self.web.setHtml(self.webhtml,QtCore.QUrl(url))
-        self.web.show()
+            
+        #self.web.show()
 
         #web signal
-        self.web.loadFinished.connect(self.cusHtml)
+        #self.web.loadFinished.connect(self.cusHtml)
         
     def cusHtml(self):
-        
+        print "Load html"
         frame = self.web.page().mainFrame()
         html=frame.toHtml()
         #print unicode(frame.toHtml()).encode('utf-8')
-        #self.web.setHtml(html,self.web.url())
+        raw_html = unicode(frame.toHtml()).encode('utf-8')
+        #html = re.sub("EZikIT3", '123', raw_html)
+        
+        self.web.setHtml(html,self.web.url())
         
 def main():
     app = QtGui.QApplication(sys.argv) 
 
     F=Floxer()
+    F.show()
     
     sys.exit(app.exec_())
 
