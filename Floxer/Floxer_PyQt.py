@@ -6,54 +6,47 @@ from PyQt4.phonon import Phonon
 import livestreamer
 import requests
 import re
+
         
 class Floxer(QtGui.QWidget):
     def __init__(self):
         super(Floxer,self).__init__()
 
         '''-------------------
-            Object
+            Config
         -------------------'''
+        self.url = ["http://disp.cc/b/62-9ZTN",
+                    "https://www.gamer.com.tw/index2.php",
+                    "https://www.youtube.com/watch?v=_DLkWyaD6aM"]
         self.webhtml = None
-        self.browser = QtWebKit.QWebView()
+        self.browser = []
         self.urledit = QtGui.QLineEdit()
         self.grid = QtGui.QGridLayout()
-        
-        self.url = "http://disp.cc/b/62-9ZTN"
-        self.webpos = [400,0,800,800]
+        [self.browser.append(QtWebKit.QWebView()) for i in range(len(self.url))]
         
         '''-------------------
             Layout Setting
         -------------------'''
         settings = QtWebKit.QWebSettings
         settings.globalSettings().setAttribute(settings.PluginsEnabled, True)
-
+        
         #self.setWindowFlags(QtCore.Qt.FramelessWindowHint)      #disable title bar
         #self.setAttribute(QtCore.Qt.WA_TranslucentBackground)   #Background transparent (CustomizeWindowHint)
-        #self.setWindowOpacity(1)                              #Windows Opacity
-        #self.setGeometry(10,10,600,600)                       
+        self.setWindowOpacity(1)                              #Windows Opacity
+        self.setGeometry(10,10,600,600)                       
 
         self.grid.addWidget(self.urledit, 1, 0)
-        self.grid.addWidget(self.browser, 2, 0)
+        [self.grid.addWidget(browser, i + 2, 0) for i,browser in enumerate(self.browser)]
         
-        self.urledit.returnPressed.connect(self._urlcallback)
+        self.urledit.returnPressed.connect(self._urlcallback) #link url callback function
         self.setLayout(self.grid)
         '''-------------------
             Flow
         -------------------'''
-        raw_url = self.url
-        self.webHTML(raw_url)
-        self.browser.setHtml(self.webhtml,QtCore.QUrl(raw_url))
-        
-        #self.browser.show()
-        #self.addWidget()
-        #self.webHTML(self.url1)
-        #self.webShow(self.url1,self.pos1)
+        for i, browser in enumerate(self.browser):
+            url = self.url[int(i)]
+            browser.load(QtCore.QUrl(url))
 
-        #self.webHTML(self.url2)
-        #self.webShow(self.url2,self.pos2)
-        #self.addVideo("../[Dymy][Shokugeki no Souma Ni no Sara][02][BIG5][1280X720].mp4")
-    
     def _urlcallback(self):
         raw_url = self.urledit.text()
         
@@ -122,10 +115,10 @@ class Floxer(QtGui.QWidget):
         
         self.webhtml = re.sub("EZikIT3", '123', web.text)
         #self.webhtml = re.sub("location", '1', self.webhtml)
-        #self.webhtml = re.sub("reload=1", 'reload=-1', web.text)
-        if self.webhtml.find("reload") > 0:
-            print "Get reload at ",self.webhtml.find("reload=1")
-            s = self.webhtml.find("reload")
+        
+        if self.webhtml.find("script") > 0:
+            print "Get reload at ",self.webhtml.find("script")
+            s = self.webhtml.find("script")
             print self.webhtml[s:s+100]
             
         else:
