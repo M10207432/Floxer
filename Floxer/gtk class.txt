@@ -1,3 +1,0 @@
-http://www.pygtk.org/pygtk2reference/class-gtkwindow.html
-
-http://digitalpbk.com/windows-gadgets/how-make-windows-gadget-windows-7

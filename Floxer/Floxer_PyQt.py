@@ -15,9 +15,7 @@ class Floxer(QtGui.QWidget):
         '''-------------------
             Config
         -------------------'''
-        self.url = ["http://disp.cc/b/62-9ZTN",
-                    "https://www.gamer.com.tw/index2.php",
-                    "https://www.youtube.com/watch?v=_DLkWyaD6aM"]
+        self.url = ["http://disp.cc/b/62-a18Y"]
         self.webhtml = None
         self.browser = []
         self.urledit = QtGui.QLineEdit()
@@ -40,12 +38,18 @@ class Floxer(QtGui.QWidget):
         
         self.urledit.returnPressed.connect(self._urlcallback) #link url callback function
         self.setLayout(self.grid)
+        
         '''-------------------
             Flow
         -------------------'''
+        html_obj = open("t1.htm",'rb')
+        html_file = html_obj.read()
+        
         for i, browser in enumerate(self.browser):
             url = self.url[int(i)]
-            browser.load(QtCore.QUrl(url))
+           
+            browser.setHtml( html_file,QtCore.QUrl(url))
+            #browser.load(QtCore.QUrl(url))
 
     def _urlcallback(self):
         raw_url = self.urledit.text()

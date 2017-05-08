@@ -14,7 +14,7 @@ def transparent_expose(widget, event):
 '''
 
 def draw_pixbuf(widget, event):
-    path = 'BayMax.png'
+    path = 'Iron.png'
     pixbuf = gtk.gdk.pixbuf_new_from_file(path)
     widget.window.draw_pixbuf(widget.style.bg_gc[gtk.STATE_NORMAL], pixbuf, 0, 0, 0,5)
  
