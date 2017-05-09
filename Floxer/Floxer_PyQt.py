@@ -15,7 +15,8 @@ class Floxer(QtGui.QWidget):
         '''-------------------
             Config
         -------------------'''
-        self.url = ["http://disp.cc/b/62-a18Y"]
+        self.url = ["http://disp.cc/b/62-a18Y",
+                    "http://vigortv.net/"]
         self.webhtml = None
         self.browser = []
         self.urledit = QtGui.QLineEdit()
@@ -42,13 +43,14 @@ class Floxer(QtGui.QWidget):
         '''-------------------
             Flow
         -------------------'''
-        html_obj = open("t1.htm",'rb')
+        html_obj = open("./html/t1.htm",'rb')
         html_file = html_obj.read()
         
         for i, browser in enumerate(self.browser):
             url = self.url[int(i)]
-           
-            browser.setHtml( html_file,QtCore.QUrl(url))
+            self.cusHtml(i, "1554index")
+            
+            #browser.setHtml( html_file,QtCore.QUrl(url))
             #browser.load(QtCore.QUrl(url))
 
     def _urlcallback(self):
@@ -160,15 +162,20 @@ class Floxer(QtGui.QWidget):
         #web signal
         #self.web.loadFinished.connect(self.cusHtml)
         
-    def cusHtml(self):
+    def cusHtml(self, i, text):
         print "Load html"
-        frame = self.web.page().mainFrame()
-        html=frame.toHtml()
-        #print unicode(frame.toHtml()).encode('utf-8')
-        raw_html = unicode(frame.toHtml()).encode('utf-8')
-        #html = re.sub("EZikIT3", '123', raw_html)
+        web = requests.get(self.url[i])
+        #self.browser[i].load(QtCore.QUrl(self.url[i]))
+        #frame = self.browser[i].page().mainFrame()
+        #html=frame.toHtml()
+        #raw_html = unicode(frame.toHtml()).encode('utf-8')
         
-        self.web.setHtml(html,self.web.url())
+        html = re.sub(text, '123', web.text)
+        #html = re.sub(text, '123', web.text)
+        #web.text = re.sub("", '123', web.text)
+
+        html = re.sub("rVa0MO3", "FUCK", html)
+        self.browser[i].setHtml(html,QtCore.QUrl(self.url[i]))
         
 def main():
     app = QtGui.QApplication(sys.argv) 
