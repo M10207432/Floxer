@@ -15,14 +15,16 @@ class Floxer(QtGui.QWidget):
         '''-------------------
             Config
         -------------------'''
-        self.url = ["http://disp.cc/b/62-a18Y",
-                    "http://vigortv.net/"]
+        self.url = ["http://disp.cc/b/62-a2BY"]
         self.webhtml = None
         self.browser = []
         self.urledit = QtGui.QLineEdit()
         self.grid = QtGui.QGridLayout()
         [self.browser.append(QtWebKit.QWebView()) for i in range(len(self.url))]
-        
+        self.zoomfactor = 0.1
+        self.main_w = -1
+        self.main_h = -1
+        self.main_size = 0
         '''-------------------
             Layout Setting
         -------------------'''
@@ -35,11 +37,14 @@ class Floxer(QtGui.QWidget):
         self.setGeometry(10,10,600,600)                       
 
         self.grid.addWidget(self.urledit, 1, 0)
-        [self.grid.addWidget(browser, i + 2, 0) for i,browser in enumerate(self.browser)]
+        self.grid.addWidget(self.browser[0], 2, 0)
+        
+        #[self.grid.addWidget(browser, i + 2, 0, 3, 3) for i,browser in enumerate(self.browser)]
         
         self.urledit.returnPressed.connect(self._urlcallback) #link url callback function
         self.setLayout(self.grid)
-        
+
+        self.resizeEvent=self._resizeCB
         '''-------------------
             Flow
         -------------------'''
@@ -52,15 +57,26 @@ class Floxer(QtGui.QWidget):
             
             #browser.setHtml( html_file,QtCore.QUrl(url))
             #browser.load(QtCore.QUrl(url))
-
+            
+    def _resizeCB(self,evt):
+        if not(self.main_w == -1 and self.main_h == -1):
+            size = evt.size().height() * evt.size().width()
+            ratio = float(size)/float(self.main_size)
+            self.browser[0].setZoomFactor(ratio)
+            print ratio
+            
+        if self.main_w == -1 and self.main_h == -1:
+            self.main_w = evt.size().width()
+            self.main_h = evt.size().height()
+            self.main_size = self.main_h * self.main_w
+        
     def _urlcallback(self):
         raw_url = self.urledit.text()
         
         #self.webHTML(raw_url)
         #self.browser.setHtml(self.webhtml,QtCore.QUrl(raw_url))
-        
         #self.browser.load(url)
-        print url
+        #print url
         
     def addWidget(self):
         '''---------------
