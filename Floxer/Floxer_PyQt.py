@@ -7,27 +7,30 @@ import livestreamer
 import requests
 import re
 
-        
 class Floxer(QtGui.QWidget):
     def __init__(self):
         super(Floxer,self).__init__()
 
         '''-------------------
-            Config
+             Config
         -------------------'''
-        self.url = ["http://disp.cc/b/62-a2BY"]
+        self.url = ["http://hichannel.hinet.net/radio/index.do"]
+        self.videopath = "./element_install/v2.mp4"
         self.webhtml = None
         self.browser = []
         self.urledit = QtGui.QLineEdit()
         self.grid = QtGui.QGridLayout()
         [self.browser.append(QtWebKit.QWebView()) for i in range(len(self.url))]
+        self.vp=Phonon.VideoPlayer()
+
         self.zoomfactor = 0.1
         self.main_w = -1
         self.main_h = -1
         self.main_size = 0
+        
         '''-------------------
-            Layout Setting
-        -------------------'''
+             Layout Setting
+         -------------------'''
         settings = QtWebKit.QWebSettings
         settings.globalSettings().setAttribute(settings.PluginsEnabled, True)
         
@@ -37,27 +40,32 @@ class Floxer(QtGui.QWidget):
         self.setGeometry(10,10,600,600)                       
 
         self.grid.addWidget(self.urledit, 1, 0)
-        self.grid.addWidget(self.browser[0], 2, 0)
+        #self.grid.addWidget(self.vp, 2, 0)
+        self.grid.addWidget(self.browser[0], 3, 0)
         
         #[self.grid.addWidget(browser, i + 2, 0, 3, 3) for i,browser in enumerate(self.browser)]
         
         self.urledit.returnPressed.connect(self._urlcallback) #link url callback function
         self.setLayout(self.grid)
 
-        self.resizeEvent=self._resizeCB
+        #self.resizeEvent=self._resizeCB
         '''-------------------
-            Flow
-        -------------------'''
+               Flow
+         -------------------'''
+        #Load content for webview---1
         html_obj = open("./html/t1.htm",'rb')
         html_file = html_obj.read()
         
         for i, browser in enumerate(self.browser):
             url = self.url[int(i)]
             self.cusHtml(i, "1554index")
-            
-            #browser.setHtml( html_file,QtCore.QUrl(url))
-            #browser.load(QtCore.QUrl(url))
-            
+
+        #Load content for Video---2
+        self.vp.setGeometry(150,10,300,300)
+        media=Phonon.MediaSource(self.videopath)
+        self.vp.load(media)
+        self.vp.play()
+        
     def _resizeCB(self,evt):
         if not(self.main_w == -1 and self.main_h == -1):
             size = evt.size().height() * evt.size().width()
@@ -94,8 +102,8 @@ class Floxer(QtGui.QWidget):
             btn load
         ---------------'''
     def addVideo(self,path):
-        self.vp=Phonon.VideoPlayer(self)
-        self.vp.setGeometry(150,10,300,300)
+        #self.vp=Phonon.VideoPlayer(self)
+        #self.vp.setGeometry(150,10,300,300)
         media=Phonon.MediaSource(path)
         self.vp.load(media)
         self.vp.play()
@@ -192,7 +200,7 @@ class Floxer(QtGui.QWidget):
 
         html = re.sub("rVa0MO3", "FUCK", html)
         self.browser[i].setHtml(html,QtCore.QUrl(self.url[i]))
-        
+
 def main():
     app = QtGui.QApplication(sys.argv) 
 
